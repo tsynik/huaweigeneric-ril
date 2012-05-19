@@ -1131,6 +1131,9 @@ static void requestDial(void *data, size_t datalen, RIL_Token t)
 
 	ret = at_send_command(cmd, NULL);
 
+        // ENABLE VOICE on ttyUSB1 (Value of AT^CVOICE, usually 16bit 8khz WAV)
+        at_send_command("AT^DDSETEX=2",NULL);
+
 	free(cmd);
 
 	/* success or failure is ignored by the upper layer here.
@@ -1185,6 +1188,9 @@ static void requestHangup(void *data, size_t datalen, RIL_Token t)
 	asprintf(&cmd, "AT+CHLD=1%d", p_line[0]);
 
 	ret = at_send_command(cmd, NULL);
+
+        // DISABLE VOICE
+        at_send_command("AT^DDSETEX=0",NULL);
 
 	free(cmd);
 	//	writesys("audio","5");
@@ -4436,16 +4442,16 @@ static void initializeCallback(void *param)
 		//at_send_command("AT+HTCmaskW1=262143,162161", NULL);
 		at_send_command("AT+CGEQREQ=1,4,0,0,0,0,2,0,\"0E0\",\"0E0\",3,0,0", NULL);
 		//at_send_command("AT+HTCNV=1,12,6", NULL);
-//		at_send_command("AT+HSDPA=1", NULL);
+		//at_send_command("AT+HSDPA=1", NULL);
 		//at_send_command("AT+HTCCNIV=0", NULL);
-//		at_send_command("AT@HTCDORMANCYSET=3", NULL);
+		//at_send_command("AT@HTCDORMANCYSET=3", NULL);
 		//at_send_command("AT@HTCPDPFD=0", NULL);
 		//at_send_command("AT+HTCAGPS=5", NULL);
 		//at_send_command("AT@AGPSADDRESS=193,253,42,109,7275", NULL);
 		at_send_command("AT",NULL);
 		/* auto connect/disconnect settings */
-//		at_send_command("AT+CGAATT=2,1,0", NULL);
-//		at_send_command("AT+BANDSET=0", NULL);
+		//at_send_command("AT+CGAATT=2,1,0", NULL);
+		//at_send_command("AT+BANDSET=0", NULL);
 		//at_send_command("AT+GTKC=2", NULL);
 
 
